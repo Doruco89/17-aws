@@ -6,32 +6,32 @@
     <title>대구 영유아 돌봄 인프라 분석</title>
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
-    />
-    <link
-      rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <style>
       :root {
-        --navy: #14202b;
-        --navy-2: #1d2e3d;
-        --paper: #f4f6f5;
-        --line: #d9dfdd;
-        --ink: #14202b;
-        --sub: #5b6b70;
-        --accent: #c8622d;
-        --c-full: #8b0000;
-        --c-double: #ff4500;
-        --c-physical: #ffa500;
-        --c-quality: #4169e1;
-        --c-good: #2e8b57;
-        --c-na: #a9a9a9;
+        --ink: #16202a;
+        --ink-2: #2c3b48;
+        --sub: #5f6c76;
+        --faint: #949ea6;
+        --paper: #f5f7f7;
+        --card: #ffffff;
+        --rule: #e4e8e8;
+        --signal: #b3271e;
+        --t-blank: #7a1414;
+        --t-double: #b3271e;
+        --t-physical: #d2851b;
+        --t-quality: #2f5d8c;
+        --t-good: #9ba6a2;
+        --t-na: #cbd0ce;
         --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
       }
       * {
         box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
       }
       body {
         margin: 0;
@@ -42,1296 +42,1030 @@
           -apple-system,
           sans-serif;
         -webkit-font-smoothing: antialiased;
-      }
-      a {
-        color: inherit;
-      }
-
-      header.top {
-        background: var(--navy);
-        color: #fff;
-        padding: 22px 32px 0 32px;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        overflow: hidden;
       }
-      header.top .header-content {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 12px;
-      }
-      header.top .brand {
+
+      /* ── 상단 ── */
+      .bar {
+        background: var(--ink);
+        color: #fff;
+        padding: 13px 26px;
         display: flex;
         align-items: baseline;
         gap: 14px;
+        flex: none;
       }
-      header.top h1 {
-        font-size: 20px;
+      .bar h1 {
         margin: 0;
+        font-size: 17px;
         font-weight: 700;
-        letter-spacing: -0.01em;
+        letter-spacing: -0.2px;
       }
-      header.top .tag {
+      .bar .src {
         font-size: 12px;
-        color: #9fb1bc;
-        font-family: var(--mono);
-      }
-      header.top .meta {
-        font-size: 12px;
-        color: #9fb1bc;
+        color: #9fb0bd;
       }
 
-      /* 네비게이션 탭 바 */
-      nav.tab-nav {
-        display: flex;
-        gap: 8px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      }
-      .tab-btn {
-        background: transparent;
-        border: none;
-        color: #9fb1bc;
-        padding: 12px 20px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        border-bottom: 3px solid transparent;
-        transition: all 0.2s ease;
-        font-family: inherit;
-      }
-      .tab-btn:hover {
-        color: #fff;
-      }
-      .tab-btn.active {
-        color: #fff;
-        border-bottom-color: var(--accent);
-      }
-
-      main {
-        max-width: 1180px;
-        margin: 0 auto;
-        padding: 28px 24px 80px;
-      }
-
-      .tab-page {
-        display: none;
-      }
-      .tab-page.active {
-        display: block;
-      }
-
-      /* 1. 진단 대시보드 탭 스타일 */
-      section.matrix-wrap {
-        display: grid;
-        grid-template-columns: 1.1fr 0.9fr;
-        gap: 24px;
-        margin-bottom: 32px;
-      }
-      @media (max-width: 880px) {
-        section.matrix-wrap {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .matrix-card {
-        background: #fff;
-        border: 1px solid var(--line);
-        border-radius: 4px;
-        padding: 22px 24px;
-      }
-      .matrix-header {
+      .hero {
+        background: var(--card);
+        border-bottom: 1px solid var(--rule);
+        padding: 14px 26px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 14px;
+        gap: 22px;
+        flex: none;
       }
-      .matrix-card h2 {
-        font-size: 14px;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--sub);
-        margin: 0;
+      .hero .say {
+        font-size: 14.5px;
+        color: var(--ink-2);
+        line-height: 1.55;
+        max-width: 720px;
+      }
+      .hero .say b {
+        color: var(--signal);
+      }
+      .stats {
+        display: flex;
+        gap: 10px;
+        flex: none;
+      }
+      .stats > * {
+        background: var(--paper);
+        border: 1px solid var(--rule);
+        border-radius: 9px;
+        padding: 8px 14px;
+        text-align: left;
+        font: inherit;
+        color: inherit;
+        min-width: 96px;
+      }
+      .stats button {
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .stats button:hover {
+        border-color: var(--signal);
+      }
+      .stats button[aria-expanded="true"] {
+        border-color: var(--signal);
+        background: #fdf3f2;
+      }
+      .lb {
+        font-size: 11px;
+        color: var(--faint);
+        margin-bottom: 2px;
+      }
+      .vl {
+        font-size: 21px;
         font-weight: 700;
+        font-family: var(--mono);
+        letter-spacing: -0.5px;
       }
 
-      .btn-open-window {
-        background: var(--navy);
-        color: #fff;
-        border: none;
-        padding: 6px 12px;
-        font-size: 11.5px;
-        font-weight: 600;
-        border-radius: 4px;
+      /* ── 본문 ── */
+      .wrap {
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 360px 1fr 0fr;
+        gap: 18px;
+        padding: 18px 26px 22px;
+        transition: grid-template-columns 0.25s;
+      }
+      .wrap[data-detail] {
+        grid-template-columns: 360px 1fr 306px;
+      }
+      .col {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .lead-line {
+        margin: 0 0 12px;
+        font-size: 13.5px;
+        line-height: 1.62;
+        color: var(--ink-2);
+      }
+      .lead-line b {
+        color: var(--ink);
+      }
+
+      /* 2×2 매트릭스 */
+      .mx {
+        display: grid;
+        grid-template-columns: 46px 1fr 1fr;
+        grid-template-rows: 22px 1fr 1fr;
+        gap: 7px;
+        flex: none;
+      }
+      .ax {
+        font-size: 11px;
+        color: var(--faint);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .ax.v {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+      }
+      .q {
+        border: 1px solid var(--rule);
+        border-left: 4px solid var(--t-na);
+        background: var(--card);
+        border-radius: 9px;
+        padding: 11px 12px;
+        text-align: left;
         cursor: pointer;
-        transition: background 0.15s ease;
+        font: inherit;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        transition: 0.15s;
+      }
+      .q:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 10px rgba(22, 32, 42, 0.08);
+      }
+      .q[aria-pressed="true"] {
+        background: #eef2f5;
+        border-color: var(--ink-2);
+      }
+      .q .n {
+        font-family: var(--mono);
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -1px;
+      }
+      .q .n small {
+        font-size: 11px;
+        font-weight: 500;
+        margin-left: 2px;
+        color: var(--faint);
+      }
+      .q .nm {
+        font-size: 12.5px;
+        font-weight: 700;
+      }
+      .q .ds {
+        font-size: 11px;
+        color: var(--sub);
+        line-height: 1.42;
+      }
+      .q.good {
+        border-left-color: var(--t-good);
+      }
+      .q.qual {
+        border-left-color: var(--t-quality);
+      }
+      .q.phys {
+        border-left-color: var(--t-physical);
+      }
+      .q.dbl {
+        border-left-color: var(--t-double);
+      }
+
+      .keys {
+        margin-top: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 13px;
+        font-size: 11px;
+        color: var(--sub);
+        flex: none;
+      }
+      .keys span {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .keys i {
+        width: 11px;
+        height: 11px;
+        border-radius: 3px;
+        display: inline-block;
+      }
+
+      /* 완전공백 목록 */
+      .drill {
+        margin-top: 14px;
+        background: var(--card);
+        border: 1px solid var(--rule);
+        border-radius: 10px;
+        padding: 13px 15px;
+        overflow: auto;
+        min-height: 0;
+      }
+      .drill .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+      .drill h3 {
+        margin: 0;
+        font-size: 13px;
+      }
+      .drill .close {
+        border: 0;
+        background: none;
+        color: var(--faint);
+        cursor: pointer;
+        font-size: 11px;
+      }
+      .cap {
+        margin: 0 0 10px;
+        font-size: 11.5px;
+        color: var(--sub);
+        line-height: 1.5;
+      }
+      .bi {
+        border-top: 1px solid var(--rule);
+        padding: 9px 0;
+      }
+      .bi .loc {
+        font-size: 12.5px;
+        font-weight: 700;
+        margin-bottom: 3px;
+      }
+      .bi .why {
+        font-size: 11.5px;
+        color: var(--sub);
+        line-height: 1.55;
+        white-space: pre-line;
+      }
+
+      /* ── 지도 ── */
+      .mapbox {
+        background: var(--card);
+        border: 1px solid var(--rule);
+        border-radius: 11px;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .maphead {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--rule);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex: none;
+      }
+      .maphead h2 {
+        margin: 0;
+        font-size: 13.5px;
+        font-weight: 700;
+      }
+      .maphead .sub {
+        font-size: 11.5px;
+        color: var(--faint);
+        margin-top: 2px;
+      }
+      .tools {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .chk {
+        font-size: 11.5px;
+        color: var(--sub);
         display: inline-flex;
         align-items: center;
         gap: 4px;
-      }
-      .btn-open-window:hover {
-        background: var(--accent);
-      }
-
-      .btn-reset {
-        background: var(--paper);
-        color: var(--ink);
-        border: 1px solid var(--line);
-        padding: 6px 12px;
-        font-size: 12px;
-        font-weight: 600;
-        border-radius: 4px;
         cursor: pointer;
-        transition: all 0.15s ease;
       }
-      .btn-reset:hover {
-        background: var(--navy);
-        color: #fff;
+      select,
+      .back {
+        border: 1px solid var(--rule);
+        background: var(--card);
+        border-radius: 7px;
+        padding: 5px 9px;
+        font: inherit;
+        font-size: 11.5px;
+        color: var(--ink-2);
+        cursor: pointer;
       }
-
-      .quad-grid {
-        display: grid;
-        grid-template-columns: 70px 1fr 1fr;
-        grid-template-rows: 24px 1fr 1fr;
-        gap: 6px;
-        height: 280px;
+      .back:hover {
+        border-color: var(--ink-2);
       }
-      .axis-label {
-        font-size: 11px;
-        color: var(--sub);
-        font-family: var(--mono);
+      .stage {
+        flex: 1;
+        min-height: 0;
+        padding: 16px;
+        overflow: auto;
         display: flex;
         align-items: center;
         justify-content: center;
       }
-      .axis-y {
-        writing-mode: vertical-rl;
-        text-orientation: mixed;
+      svg.gumap {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
       }
-      .quad {
-        border-radius: 4px;
-        padding: 12px 14px;
+      .gu rect {
+        transition: 0.16s;
+        stroke: #fff;
+        stroke-width: 2.5;
         cursor: pointer;
-        transition:
-          transform 0.12s ease,
-          box-shadow 0.12s ease;
+      }
+      .gu:hover rect {
+        stroke: var(--ink);
+        stroke-width: 3;
+      }
+      .gu text {
+        pointer-events: none;
+        text-anchor: middle;
+      }
+      .gu .gname {
+        font-size: 17px;
+        font-weight: 700;
+      }
+      .gu .gnum {
+        font-size: 12px;
+        font-family: var(--mono);
+        opacity: 0.82;
+      }
+      .gu.dim rect {
+        opacity: 0.28;
+      }
+
+      /* 동 타일 */
+      .dongwrap {
+        width: 100%;
+        align-self: flex-start;
+      }
+      .dongtitle {
+        font-size: 12px;
+        color: var(--sub);
+        margin-bottom: 11px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(122px, 1fr));
+        gap: 8px;
+      }
+      .dt {
+        border: 0;
+        border-radius: 9px;
+        padding: 11px 11px 10px;
+        text-align: left;
+        cursor: pointer;
+        font: inherit;
+        color: #fff;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        position: relative;
-        border: 2px solid transparent;
+        gap: 4px;
+        transition: 0.14s;
+        min-height: 78px;
       }
-      .quad:hover {
+      .dt:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 12px rgba(22, 32, 42, 0.18);
       }
-      .quad.active {
-        border-color: var(--ink);
+      .dt[aria-pressed="true"] {
+        outline: 3px solid var(--ink);
+        outline-offset: 2px;
       }
-      .quad .count {
-        font-family: var(--mono);
-        font-size: 32px;
+      .dt .dn {
+        font-size: 13.5px;
         font-weight: 700;
-        line-height: 1;
+        letter-spacing: -0.3px;
       }
-      .quad .name {
-        font-size: 13px;
-        font-weight: 600;
-        margin-top: 6px;
-      }
-      .quad .desc {
-        font-size: 11px;
-        color: rgba(0, 0, 0, 0.55);
-        margin-top: 2px;
-      }
-
-      .q-good {
-        background: #e8f3ec;
-      }
-      .q-good .count {
-        color: var(--c-good);
-      }
-      .q-physical {
-        background: #fff3e0;
-      }
-      .q-physical .count {
-        color: #b36b00;
-      }
-      .q-quality {
-        background: #eaf0fc;
-      }
-      .q-quality .count {
-        color: var(--c-quality);
-      }
-      .q-double {
-        background: #ffe9e0;
-      }
-      .q-double .count {
-        color: #c53e00;
-      }
-
-      .kpi-strip {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1px;
-        background: var(--line);
-        border: 1px solid var(--line);
-        border-radius: 4px;
-        overflow: hidden;
-      }
-      .kpi {
-        background: #fff;
-        padding: 16px 18px;
-      }
-      .kpi .label {
-        font-size: 11px;
-        color: var(--sub);
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-      }
-      .kpi .value {
-        font-family: var(--mono);
-        font-size: 24px;
-        font-weight: 700;
-        margin-top: 4px;
-      }
-      .kpi .value.na {
-        color: var(--c-full);
-      }
-      .kpi .sub-note {
+      .dt .dl {
         font-size: 10.5px;
-        color: var(--sub);
-        margin-top: 3px;
+        opacity: 0.9;
       }
-      .callout-note {
-        background: #fff3e0;
-        border-left: 3px solid var(--accent);
-        padding: 8px 12px;
-        border-radius: 3px;
-        color: var(--ink) !important;
-      }
-      .callout-note b {
-        color: var(--accent);
+      .dt .dp {
+        font-size: 10.5px;
         font-family: var(--mono);
+        opacity: 0.86;
+        margin-top: auto;
       }
-      .kpi.clickable {
-        cursor: pointer;
-        transition: background 0.15s ease;
+      .dt.pale {
+        color: var(--ink);
       }
-      .kpi.clickable:hover {
-        background: #f7f0ea;
+      .dt.pale .dl,
+      .dt.pale .dp {
+        opacity: 0.72;
       }
 
-      #blankDetail {
+      /* ── 상세 ── */
+      .detail {
+        background: var(--card);
+        border: 1px solid var(--rule);
+        border-radius: 11px;
+        padding: 15px 16px;
+        overflow: auto;
+        min-height: 0;
         display: none;
-        margin-top: 16px;
-        border-top: 1px dashed var(--line);
-        padding-top: 14px;
       }
-      #blankDetail.show {
+      .wrap[data-detail] .detail {
         display: block;
       }
-      #blankDetail h4 {
-        font-size: 12px;
-        margin: 0 0 10px;
-        color: var(--sub);
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
+      .detail .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
       }
-      .blank-item {
-        padding: 10px 0;
-        border-bottom: 1px solid var(--line);
-        font-size: 12.5px;
+      .detail h3 {
+        margin: 0 0 2px;
+        font-size: 15.5px;
       }
-      .blank-item:last-child {
-        border-bottom: none;
-      }
-      .blank-item .loc {
+      .detail .badge {
+        display: inline-block;
+        color: #fff;
+        border-radius: 5px;
+        padding: 2px 8px;
+        font-size: 11px;
         font-weight: 700;
-        margin-bottom: 4px;
+        margin: 7px 0 12px;
       }
-      .blank-item .reason {
+      .rows {
+        border-top: 1px solid var(--rule);
+      }
+      .rw {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--rule);
+        font-size: 12px;
+      }
+      .rw span:first-child {
         color: var(--sub);
+      }
+      .rw span:last-child {
+        font-family: var(--mono);
+        font-weight: 600;
+      }
+      .empty {
+        color: var(--faint);
+        font-size: 12.5px;
         line-height: 1.6;
       }
 
-      /* 토글러 영역 */
-      .toggle-content {
-        display: none;
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-      }
-      .toggle-content.visible {
-        display: block;
-        opacity: 1;
-      }
-
-      /* map */
-      section.map-section {
-        margin-bottom: 32px;
-      }
-      .panel-title {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-      .panel-title h2 {
-        font-size: 16px;
-        margin: 0;
-        font-weight: 700;
-      }
-      .filters {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-      }
-      select {
-        font-family: "Pretendard", sans-serif;
-        font-size: 12px;
-        padding: 6px 10px;
-        border: 1px solid var(--line);
-        border-radius: 4px;
-        background: #fff;
-        color: var(--ink);
-      }
-      #map {
-        height: 480px;
-        border: 1px solid var(--line);
-        border-radius: 4px;
-      }
-      .legend-row {
-        display: flex;
-        gap: 14px;
-        flex-wrap: wrap;
-        margin-top: 10px;
-        font-size: 11px;
-        color: var(--sub);
-      }
-      .legend-row span.dot {
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 5px;
-      }
-
-      /* 2. 분석 도구 탭 (6장/7장) 스타일 */
-      section.analysis-page {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-      }
-      @media (max-width: 880px) {
-        section.analysis-page {
+      @media (max-width: 1100px) {
+        body {
+          overflow: auto;
+        }
+        .wrap,
+        .wrap[data-detail] {
           grid-template-columns: 1fr;
         }
+        .hero {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .stage {
+          min-height: 420px;
+        }
       }
-      .card {
-        background: #fff;
-        border: 1px solid var(--line);
-        border-radius: 4px;
-        padding: 24px 26px;
-      }
-      .card h3 {
-        font-size: 16px;
-        margin: 0 0 6px;
-        font-weight: 700;
-      }
-      .card .sub {
-        font-size: 12.5px;
-        color: var(--sub);
-        margin-bottom: 16px;
-      }
-
-      .weight-bar-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 12px;
-        font-size: 12.5px;
-      }
-      .weight-bar-row .name {
-        width: 150px;
-        flex-shrink: 0;
-        color: var(--sub);
-      }
-      .weight-bar-track {
-        flex: 1;
-        background: #eef1f0;
-        border-radius: 3px;
-        height: 10px;
-        overflow: hidden;
-      }
-      .weight-bar-fill {
-        height: 100%;
-        background: var(--accent);
-      }
-      .weight-bar-row .pct {
-        width: 48px;
-        text-align: right;
-        font-family: var(--mono);
-      }
-
-      table.reg-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 12px;
-        margin-top: 6px;
-      }
-      table.reg-table th,
-      table.reg-table td {
-        padding: 8px 6px;
-        text-align: right;
-        border-bottom: 1px solid var(--line);
-      }
-      table.reg-table th:first-child,
-      table.reg-table td:first-child {
-        text-align: left;
-      }
-      table.reg-table th {
-        color: var(--sub);
-        font-weight: 600;
-        font-size: 11px;
-        text-transform: uppercase;
-      }
-      .sig-star {
-        color: var(--accent);
-        font-weight: 700;
-      }
-      .r2-badge {
-        font-family: var(--mono);
-        font-size: 12px;
-        background: #f1f0ec;
-        padding: 4px 8px;
-        border-radius: 3px;
-        display: inline-block;
-        margin-top: 10px;
-      }
-      .caveat {
-        font-size: 11px;
-        color: var(--sub);
-        margin-top: 10px;
-        line-height: 1.5;
-        border-top: 1px dashed var(--line);
-        padding-top: 8px;
-      }
-
-      .diag-line {
-        font-size: 12.5px;
-        color: var(--sub);
-        margin-top: 8px;
-        line-height: 1.6;
-      }
-      .diag-line b {
-        color: var(--ink);
-        font-family: var(--mono);
-      }
-
-      /* 3. 인사이트 탭 스타일 */
-      .insight-card {
-        background: #fff;
-        border: 1px solid var(--line);
-        border-radius: 4px;
-        padding: 24px 26px;
-        margin-bottom: 20px;
-      }
-      .insight-card .eyebrow {
-        font-size: 11px;
-        color: var(--accent);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        font-weight: 700;
-      }
-      .insight-card h3 {
-        font-size: 16px;
-        margin: 4px 0 14px;
-        font-weight: 700;
-      }
-      .insight-quote {
-        font-size: 14px;
-        line-height: 1.7;
-        padding: 14px 16px;
-        background: var(--paper);
-        border-left: 3px solid var(--accent);
-        margin: 14px 0;
-        font-weight: 500;
-      }
-      table.insight-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 12.5px;
-        margin: 10px 0;
-      }
-      table.insight-table th,
-      table.insight-table td {
-        padding: 8px 10px;
-        text-align: right;
-        border-bottom: 1px solid var(--line);
-      }
-      table.insight-table th:first-child,
-      table.insight-table td:first-child {
-        text-align: left;
-      }
-      table.insight-table th {
-        color: var(--sub);
-        font-weight: 600;
-        font-size: 11px;
-        text-transform: uppercase;
-        background: var(--paper);
-      }
-      table.insight-table td.hot {
-        color: var(--c-full);
-        font-weight: 700;
-      }
-      .insight-note {
-        font-size: 12px;
-        color: var(--sub);
-        line-height: 1.6;
-        margin-top: 6px;
-      }
-      .policy-list {
-        margin: 0;
-        padding-left: 18px;
-        font-size: 13px;
-        line-height: 1.9;
-      }
-
-      footer {
-        text-align: center;
-        font-size: 11px;
-        color: var(--sub);
-        padding: 24px;
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
       }
     </style>
   </head>
   <body>
-    <header class="top">
-      <div class="header-content">
-        <div class="brand">
-          <h1>대구 영유아 돌봄 인프라 분석</h1>
-          <span class="tag">FastAPI + pandas · 150개 읍면동</span>
-        </div>
-        <div class="meta" id="lastUpdated">데이터 로딩 중…</div>
-      </div>
+    <div class="bar">
+      <h1>대구 영유아 돌봄 인프라 분석</h1>
+      <span class="src" id="src">읍면동 단위 · 공공데이터 기반</span>
+    </div>
 
-      <!-- 상단 네비게이션 탭 -->
-      <nav class="tab-nav">
-        <button class="tab-btn active" data-tab="tab-dashboard">
-          진단 대시보드
+    <div class="hero">
+      <div class="say" id="heroSay">불러오는 중…</div>
+      <div class="stats">
+        <div>
+          <div class="lb">분석 대상 동</div>
+          <div class="vl" id="kpi-total">–</div>
+        </div>
+        <button id="blankBtn" aria-expanded="false">
+          <div class="lb">시설 없음</div>
+          <div class="vl" id="kpi-blank">–</div>
         </button>
-        <button class="tab-btn" data-tab="tab-insights">핵심 인사이트</button>
-        <button class="tab-btn" data-tab="tab-analysis">
-          분석 도구 (6·7장)
-        </button>
-      </nav>
-    </header>
+        <div>
+          <div class="lb">평균 충원율</div>
+          <div class="vl" id="kpi-fill">–</div>
+        </div>
+      </div>
+    </div>
 
-    <main>
-      <!-- TAB 1: 진단 대시보드 -->
-      <div id="tab-dashboard" class="tab-page active">
-        <section class="matrix-wrap">
-          <div class="matrix-card">
-            <div class="matrix-header">
-              <h2>미스매치 진단 매트릭스</h2>
-              <button class="btn-open-window" id="btnOpenMapWindow">
-                돌봄지도 새 창으로 보기 ↗
-              </button>
-            </div>
-            <div class="quad-grid">
-              <div></div>
-              <div class="axis-label">충원율 높음</div>
-              <div class="axis-label">충원율 낮음</div>
+    <div class="wrap" id="wrap">
+      <!-- 왼쪽: 2×2 -->
+      <div class="col">
+        <p class="lead-line">
+          자리가 <b>넉넉한지</b>와 그 자리가 <b>실제로 찼는지</b>, 두 가지로
+          150개 동을 넷으로 나눴습니다. 칸을 누르면 지도가 걸러집니다.
+        </p>
+        <div class="mx">
+          <div></div>
+          <div class="ax">자리가 찼음</div>
+          <div class="ax">자리가 남음</div>
 
-              <div class="axis-label axis-y">커버율 높음</div>
-              <div class="quad q-good" data-type="양호">
-                <div class="count" id="cnt-양호">–</div>
-                <div class="name">양호</div>
-                <div class="desc">공급 충분 · 이용 활발 → 현상 유지</div>
-              </div>
-              <div class="quad q-quality" data-type="질적미스매치">
-                <div class="count" id="cnt-질적미스매치">–</div>
-                <div class="name">질적 미스매치</div>
-                <div class="desc">시설 있는데 안 감 → 원인 조사 필요</div>
-              </div>
+          <div class="ax v">자리 넉넉</div>
+          <button class="q good" data-type="양호" aria-pressed="false">
+            <span class="n" id="cnt-양호">–<small>곳</small></span>
+            <span class="nm">유지</span>
+            <span class="ds">자리도 넉넉하고 잘 이용합니다</span>
+          </button>
+          <button class="q qual" data-type="질적미스매치" aria-pressed="false">
+            <span class="n" id="cnt-질적미스매치">–<small>곳</small></span>
+            <span class="nm">조사 필요</span>
+            <span class="ds">자리는 있는데 아이가 가지 않습니다</span>
+          </button>
 
-              <div class="axis-label axis-y">커버율 낮음</div>
-              <div class="quad q-physical" data-type="물리적부족">
-                <div class="count" id="cnt-물리적부족">–</div>
-                <div class="name">물리적 부족</div>
-                <div class="desc">시설 적어 꽉 참 → 시설 확충</div>
-              </div>
-              <div class="quad q-double" data-type="이중취약">
-                <div class="count" id="cnt-이중취약">–</div>
-                <div class="name">이중 취약</div>
-                <div class="desc">공급도 이용도 낮음 → 종합 개입</div>
-              </div>
-            </div>
+          <div class="ax v">자리 부족</div>
+          <button class="q phys" data-type="물리적부족" aria-pressed="false">
+            <span class="n" id="cnt-물리적부족">–<small>곳</small></span>
+            <span class="nm">확충 필요</span>
+            <span class="ds">자리가 모자라 이미 꽉 찼습니다</span>
+          </button>
+          <button class="q dbl" data-type="이중취약" aria-pressed="false">
+            <span class="n" id="cnt-이중취약">–<small>곳</small></span>
+            <span class="nm">집중 지원</span>
+            <span class="ds">자리도 적고 이용도 저조합니다</span>
+          </button>
+        </div>
+
+        <div class="keys">
+          <span><i style="background: #7a1414"></i>시설 없음</span>
+          <span><i style="background: #b3271e"></i>집중 지원</span>
+          <span><i style="background: #d2851b"></i>확충 필요</span>
+          <span><i style="background: #2f5d8c"></i>조사 필요</span>
+          <span><i style="background: #9ba6a2"></i>유지</span>
+          <span><i style="background: #cbd0ce"></i>판정 보류</span>
+        </div>
+
+        <div class="drill" id="drill" hidden>
+          <div class="top">
+            <h3>시설이 한 곳도 없는 지역</h3>
+            <button class="close" id="drillClose">닫기</button>
           </div>
-
-          <div class="matrix-card">
-            <h2>핵심 지표 요약</h2>
-            <div class="kpi-strip">
-              <div class="kpi">
-                <div class="label">분석 대상 동</div>
-                <div class="value" id="kpi-total">–</div>
-              </div>
-              <div class="kpi clickable" id="kpiBlankBox">
-                <div class="label">완전 공백</div>
-                <div class="value na" id="kpi-blank">–</div>
-              </div>
-              <div class="kpi">
-                <div class="label">커버율 (중앙값)</div>
-                <div class="value" id="kpi-cover">–</div>
-                <div class="sub-note" id="kpi-cover-sub">–</div>
-              </div>
-              <div class="kpi">
-                <div class="label">평균 충원율</div>
-                <div class="value" id="kpi-fill">–</div>
-              </div>
-            </div>
-            <p class="diag-line" style="margin-top: 16px">
-              수요(영유아인구) · 공급(정원) · 실현(현원) 3대 지표를 조합해
-              "시설이 없는 곳"과 "시설은 있는데 이용이 저조한 곳"을 구분합니다.
-              원인은 시설 품질·안전·접근성 등 다양할 수 있으며, 정량
-              데이터만으로 단정하지 않습니다.
-            </p>
-            <p
-              class="diag-line callout-note"
-              id="coverageInsight"
-              style="margin-top: 10px"
-            ></p>
-            <div id="blankDetail">
-              <h4>완전공백 지역 상세</h4>
-              <div id="blankList"></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- 사분면 클릭 시 표시되는 동적 지도 영역 -->
-        <div id="dynamicMapContent" class="toggle-content">
-          <section class="map-section" id="mapSection">
-            <div class="panel-title">
-              <h2>읍면동별 돌봄 인프라 지도</h2>
-              <div class="filters">
-                <select id="guFilter">
-                  <option value="">전체 구·군</option>
-                </select>
-                <select id="typeFilter">
-                  <option value="">전체 유형</option>
-                  <option value="완전공백">완전공백</option>
-                  <option value="이중취약">이중취약</option>
-                  <option value="물리적부족">물리적부족</option>
-                  <option value="질적미스매치">질적미스매치</option>
-                  <option value="양호">양호</option>
-                  <option value="판정불가">판정불가</option>
-                </select>
-                <button class="btn-reset" id="btnResetMap">전체보기</button>
-              </div>
-            </div>
-            <div id="map"></div>
-            <div class="legend-row">
-              <span
-                ><span class="dot" style="background: #8b0000"></span
-                >완전공백</span
-              >
-              <span
-                ><span class="dot" style="background: #ff4500"></span
-                >이중취약</span
-              >
-              <span
-                ><span class="dot" style="background: #ffa500"></span
-                >물리적부족</span
-              >
-              <span
-                ><span class="dot" style="background: #4169e1"></span
-                >질적미스매치</span
-              >
-              <span
-                ><span class="dot" style="background: #2e8b57"></span>양호</span
-              >
-              <span
-                ><span class="dot" style="background: #a9a9a9"></span
-                >판정불가</span
-              >
-            </div>
-          </section>
+          <p class="cap">
+            숫자만으로는 모두 같은 “공백”이지만, 배경은 서로 다릅니다.
+          </p>
+          <div id="blankList"></div>
         </div>
       </div>
 
-      <!-- TAB 2: 핵심 인사이트 -->
-      <div id="tab-insights" class="tab-page">
-        <div class="panel-title" style="margin-bottom: 16px">
-          <h2>핵심 인사이트 — 인구이동 데이터로 본 돌봄 공백</h2>
-        </div>
-        <div id="insightsBody">불러오는 중…</div>
-      </div>
-
-      <!-- TAB 3: 분석 도구 (6장 / 7장) -->
-      <div id="tab-analysis" class="tab-page">
-        <section class="analysis-page">
-          <div class="card">
-            <h3>6장 · 엔트로피 가중치 종합지수</h3>
-            <div class="sub">
-              전체_커버율 + 체육밀도 → Min-Max 정규화 후 지역 간 변동성 기반
-              자동 가중
+      <!-- 가운데: 지도 -->
+      <div class="col">
+        <div class="mapbox">
+          <div class="maphead">
+            <div>
+              <h2 id="mapTitle">대구 구·군</h2>
+              <div class="sub" id="mapSub">
+                구를 누르면 그 안의 동이 나옵니다
+              </div>
             </div>
-            <div id="weightBars"></div>
-            <div class="diag-line" id="entropyDiag"></div>
+            <div class="tools">
+              <label class="chk"
+                ><input type="checkbox" id="gunwi" /> 군위군 포함</label
+              >
+              <select id="typeFilter">
+                <option value="">전체 유형</option>
+                <option value="완전공백">시설 없음</option>
+                <option value="이중취약">집중 지원</option>
+                <option value="물리적부족">확충 필요</option>
+                <option value="질적미스매치">조사 필요</option>
+                <option value="양호">유지</option>
+                <option value="판정불가">판정 보류</option>
+              </select>
+              <button class="back" id="backBtn" hidden>← 전체 구·군</button>
+            </div>
           </div>
-
-          <div class="card">
-            <h3>7장 · 회귀분석 (검증 도구)</h3>
-            <div class="sub">종합지수가 임의가 아님을 통계적으로 확인</div>
-            <div id="regressionBody">불러오는 중…</div>
-          </div>
-        </section>
+          <div class="stage" id="stage">불러오는 중…</div>
+        </div>
       </div>
-    </main>
 
-    <footer>
-      대구 영유아 돌봄 인프라 분석 · 공공데이터(행안부/교육부/국토부/KOSIS) 기반
-      · 원인 단정이 아닌 진단 지표 제공
-    </footer>
+      <!-- 오른쪽: 동 상세 -->
+      <div class="col detail" id="detail"></div>
+    </div>
 
     <script>
       const TYPE_COLORS = {
-        완전공백: "#8B0000",
-        이중취약: "#FF4500",
-        물리적부족: "#FFA500",
-        질적미스매치: "#4169E1",
-        양호: "#2E8B57",
-        판정불가: "#A9A9A9",
+        완전공백: "#7A1414",
+        이중취약: "#B3271E",
+        물리적부족: "#D2851B",
+        질적미스매치: "#2F5D8C",
+        양호: "#9BA6A2",
+        판정불가: "#CBD0CE",
+      };
+      const LABEL = {
+        완전공백: "시설 없음",
+        이중취약: "집중 지원",
+        물리적부족: "확충 필요",
+        질적미스매치: "조사 필요",
+        양호: "유지",
+        판정불가: "판정 보류",
+      };
+      const PALE = new Set(["양호", "판정불가"]);
+
+      // 도식 지도 — 대구 구·군의 실제 위치를 단순 블록으로 배치
+      const GU_BOX = {
+        군위군: [120, 12, 320, 88],
+        북구: [96, 112, 236, 116],
+        동구: [344, 112, 200, 218],
+        서구: [40, 240, 140, 90],
+        중구: [192, 240, 140, 90],
+        달서구: [40, 342, 140, 128],
+        남구: [192, 342, 140, 128],
+        수성구: [344, 342, 200, 128],
+        달성군: [40, 482, 292, 130],
       };
 
+      // 실제 데이터를 분석해 작성한 완전공백 4곳 원인 설명
       const BLANK_REASONS = {
         비산6동: `영유아 58명이 거주하지만 동 내 유치원·어린이집이 0곳입니다. 다만 바로 인접한
-    비산1동, 비산4동, 비산2·3동은 시설을 갖추고 있어 행정동 경계를 넘어 통원하고 있을 가능성이 높습니다.`,
-        우보면: `영유아 23명, 시설 0곳입니다. 인구 감소 농촌 지역으로 운영 채산성이 성립하기 어렵습니다.`,
-        산성면: `영유아 17명, 시설 0곳입니다. 개별 시설 운영이 현실적으로 어려운 농촌 지역입니다.`,
-        삼국유사면: `영유아 3명으로, 상시 보육 수요 자체가 거의 없는 수준입니다.`,
+비산1동(77명·시설 1~2개소·정원 141~245석), 비산4동(63명), 비산2·3동(47명), 비산5동(42명)은
+비슷한 인구 규모에도 모두 시설을 갖추고 있습니다. 인접 동만 유독 시설이 몰려 있는 패턴으로 볼 때,
+실제로는 아이들이 행정동 경계를 넘어 이웃 동으로 통원하고 있을 가능성이 높습니다.
+즉 '완전공백'이라기보다 행정동 단위 집계가 만든 통계상 사각지대에 가깝습니다.`,
+        우보면: `영유아 23명, 시설 0곳입니다. 군위군 전체 영유아 인구는 2023년 324명 → 2025년 259명으로
+3년 새 약 20% 감소한 농촌 지역이며, 2023년 대구 편입 이전부터 인구 감소가 진행돼 왔습니다.
+이 정도 아동 수로는 시설 신설의 운영 채산성 자체가 성립하기 어려운 구조입니다.`,
+        산성면: `영유아 17명, 시설 0곳입니다. 군위군은 전체 영유아 인구가 3년간 지속적으로 줄고 있는
+농촌 지역으로, 소수 아동을 위한 개별 시설 운영이 현실적으로 어려운 지역입니다.`,
+        삼국유사면: `영유아 단 3명으로, 사실상 상시 보육 수요 자체가 거의 없는 수준입니다.
+군위군 전체가 인구 감소 추세인 가운데서도 가장 인구가 적은 면 단위 지역입니다.`,
       };
 
-      let map,
-        layerGroup,
-        allDong = [];
-      const daeguBounds = L.latLngBounds([35.6, 128.35], [36.3, 128.85]);
+      const pct = (x) => (x * 100).toFixed(1) + "%";
+      const num = (x) => (x || 0).toLocaleString();
+      const $ = (id) => document.getElementById(id);
+      const fetchJSON = (u) => fetch(u).then((r) => r.json());
 
-      async function fetchJSON(url) {
-        const r = await fetch(url);
-        return r.json();
-      }
+      let allDong = [];
+      let curGu = null; // null이면 구 지도, 아니면 동 화면
+      let curDong = null;
 
-      function initTabNavigation() {
-        const buttons = document.querySelectorAll(".tab-btn");
-        const pages = document.querySelectorAll(".tab-page");
-
-        buttons.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const targetTab = btn.dataset.tab;
-
-            buttons.forEach((b) => b.classList.remove("active"));
-            pages.forEach((p) => p.classList.remove("active"));
-
-            btn.classList.add("active");
-            const activePage = document.getElementById(targetTab);
-            if (activePage) activePage.classList.add("active");
-
-            if (
-              targetTab === "tab-dashboard" &&
-              document
-                .getElementById("dynamicMapContent")
-                .classList.contains("visible")
-            ) {
-              setTimeout(() => {
-                map.invalidateSize();
-              }, 100);
-            }
-          });
-        });
-      }
-
-      function initMap() {
-        map = L.map("map", {
-          maxBounds: daeguBounds.pad(0.05),
-          maxBoundsViscosity: 1.0,
-          minZoom: 11,
-        }).fitBounds(daeguBounds);
-
-        L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-          {
-            attribution: "&copy; OpenStreetMap &copy; CARTO",
-            maxZoom: 19,
-            subdomains: "abcd",
-          },
-        ).addTo(map);
-
-        layerGroup = L.layerGroup().addTo(map);
-      }
-
-      function renderMarkers(rows) {
-        layerGroup.clearLayers();
-        rows.forEach((r) => {
-          if (r.lat == null || r.lng == null) return;
-          const color = TYPE_COLORS[r.미스매치_유형] || "#999";
-          const radius = Math.max(
-            6,
-            Math.min(22, (r.영유아인구_0_6세 || 0) / 80),
-          );
-          const cover =
-            r.전체_커버율 != null
-              ? (r.전체_커버율 * 100).toFixed(1) + "%"
-              : "-";
-          const fill =
-            r.전체_충원율 != null
-              ? (r.전체_충원율 * 100).toFixed(1) + "%"
-              : "-";
-          const price =
-            r.평균제곱미터당가격_만원 != null
-              ? Math.round(r.평균제곱미터당가격_만원).toLocaleString() +
-                "만원/㎡"
-              : "-";
-          const popup =
-            `<b>${r.시군구명} ${r.읍면동명}</b><br>` +
-            `유형: <b>${r.미스매치_유형}</b><br>` +
-            `영유아인구(0-6세): ${(r.영유아인구_0_6세 || 0).toLocaleString()}명<br>` +
-            `유치원 ${r.유치원수 || 0}곳 · 어린이집 ${r.어린이집수 || 0}곳 · 체육시설 ${r.체육시설수 || 0}곳<br>` +
-            `전체 커버율: ${cover} · 충원율: ${fill}<br>` +
-            `아파트 평균가: ${price}`;
-          L.circleMarker([r.lat, r.lng], {
-            radius,
-            fillColor: color,
-            color: "#fff",
-            weight: 1.5,
-            fillOpacity: 0.85,
-          })
-            .addTo(layerGroup)
-            .bindPopup(popup);
-        });
-      }
-
-      function populateGuFilter(rows) {
-        const sel = document.getElementById("guFilter");
-        const gus = [...new Set(rows.map((r) => r.시군구명))].sort();
-        gus.forEach((g) => {
-          const o = document.createElement("option");
-          o.value = g;
-          o.textContent = g;
-          sel.appendChild(o);
-        });
-      }
-
-      function applyFilters() {
-        const gu = document.getElementById("guFilter").value;
-        const type = document.getElementById("typeFilter").value;
-        let rows = allDong;
-        if (gu) rows = rows.filter((r) => r.시군구명 === gu);
-        if (type) rows = rows.filter((r) => r.미스매치_유형 === type);
-        renderMarkers(rows);
-      }
-
-      // 지도 전체보기 (초기화) 기능
-      function resetMapToOverall() {
-        document.getElementById("guFilter").value = "";
-        document.getElementById("typeFilter").value = "";
-        document
-          .querySelectorAll(".quad")
-          .forEach((q) => q.classList.remove("active"));
-        applyFilters();
-        map.fitBounds(daeguBounds);
-      }
-
-      function showDynamicMapContent() {
-        const container = document.getElementById("dynamicMapContent");
-        if (!container.classList.contains("visible")) {
-          container.classList.add("visible");
-          setTimeout(() => {
-            map.invalidateSize();
-          }, 100);
-        }
-      }
-
-      function highlightQuadrant(type) {
-        showDynamicMapContent();
-
-        document
-          .querySelectorAll(".quad")
-          .forEach((q) => q.classList.remove("active"));
-        const el = document.querySelector(`.quad[data-type="${type}"]`);
-        if (el) el.classList.add("active");
-
-        document.getElementById("typeFilter").value = type;
-        applyFilters();
-
-        document.getElementById("mapSection").scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
-
-      // 새 창에서 지도를 독립적으로 여는 기능
-      function openMapInNewWindow() {
-        const mapWindow = window.open(
-          "",
-          "_blank",
-          "width=1100,height=750,scrollbars=yes,resizable=yes",
+      /* ── 현재 필터가 걸린 목록 ── */
+      function visible() {
+        const type = $("typeFilter").value,
+          gw = $("gunwi").checked;
+        return allDong.filter(
+          (r) =>
+            (gw || r["시군구명"] !== "군위군") &&
+            (!type || r["미스매치_유형"] === type),
         );
-        mapWindow.document.write(`
-          <!DOCTYPE html>
-          <html lang="ko">
-          <head>
-            <meta charset="UTF-8">
-            <title>대구 영유아 돌봄 인프라 지도 (전체보기)</title>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"><\/script>
-            <style>
-              body { margin: 0; padding: 16px; font-family: 'Pretendard', sans-serif; background: #f4f6f5; }
-              .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-              h2 { margin: 0; font-size: 18px; color: #14202b; }
-              #popMap { height: calc(100vh - 110px); border-radius: 6px; border: 1px solid #d9dfdd; }
-              .legend { display: flex; gap: 12px; margin-top: 10px; font-size: 12px; color: #5b6b70; }
-              .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 4px; }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <h2>대구 영유아 돌봄 인프라 지도</h2>
-            </div>
-            <div id="popMap"></div>
-            <div class="legend">
-              <span><span class="dot" style="background:#8B0000"></span>완전공백</span>
-              <span><span class="dot" style="background:#FF4500"></span>이중취약</span>
-              <span><span class="dot" style="background:#FFA500"></span>물리적부족</span>
-              <span><span class="dot" style="background:#4169E1"></span>질적미스매치</span>
-              <span><span class="dot" style="background:#2E8B57"></span>양호</span>
-              <span><span class="dot" style="background:#A9A9A9"></span>판정불가</span>
-            </div>
-            <script>
-              const TYPE_COLORS = ${JSON.stringify(TYPE_COLORS)};
-              const rows = ${JSON.stringify(allDong)};
-              const daeguBounds = L.latLngBounds([35.6, 128.35], [36.3, 128.85]);
-
-              const popMap = L.map("popMap").fitBounds(daeguBounds);
-              L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-                attribution: "&copy; OpenStreetMap &copy; CARTO"
-              }).addTo(popMap);
-
-              rows.forEach(r => {
-                if (r.lat == null || r.lng == null) return;
-                const color = TYPE_COLORS[r.미스매치_유형] || "#999";
-                const radius = Math.max(6, Math.min(22, (r.영유아인구_0_6세 || 0) / 80));
-                const cover = r.전체_커버율 != null ? (r.전체_커버율 * 100).toFixed(1) + "%" : "-";
-                const fill = r.전체_충원율 != null ? (r.전체_충원율 * 100).toFixed(1) + "%" : "-";
-                const price = r.평균제곱미터당가격_만원 != null ? Math.round(r.평균제곱미터당가격_만원).toLocaleString() + "만원/㎡" : "-";
-                const popup = \`<b>\${r.시군구명} \${r.읍면동명}</b><br>\` +
-                              \`유형: <b>\${r.미스매치_유형}</b><br>\` +
-                              \`영유아인구(0-6세): \${(r.영유아인구_0_6세 || 0).toLocaleString()}명<br>\` +
-                              \`유치원 \${r.유치원수 || 0}곳 · 어린이집 \${r.어린이집수 || 0}곳 · 체육시설 \${r.체육시설수 || 0}곳<br>\` +
-                              \`전체 커버율: \${cover} · 충원율: \${fill}<br>\` +
-                              \`아파트 평균가: \${price}\`;
-                L.circleMarker([r.lat, r.lng], {
-                  radius, fillColor: color, color: "#fff", weight: 1.5, fillOpacity: 0.85
-                }).addTo(popMap).bindPopup(popup);
-              });
-            <\/script>
-          </body>
-          </html>
-        `);
       }
 
+      /* ── 구 색: 선택 유형(없으면 취약 3종)에 해당하는 동 비율 ── */
+      const WEAK = new Set(["완전공백", "이중취약", "물리적부족"]);
+      function guShade(rows) {
+        const type = $("typeFilter").value;
+        if (!rows.length) return "#EDF0F0";
+        const hit = rows.filter((r) =>
+          type ? r["미스매치_유형"] === type : WEAK.has(r["미스매치_유형"]),
+        ).length;
+        const ratio = hit / rows.length;
+        const base = type ? TYPE_COLORS[type] : "#B3271E";
+        return mix("#EDF0F0", base, Math.min(1, ratio * 1.25));
+      }
+      function mix(a, b, t) {
+        const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+        const A = p(a),
+          B = p(b);
+        return (
+          "#" +
+          A.map((v, i) =>
+            Math.round(v + (B[i] - v) * t)
+              .toString(16)
+              .padStart(2, "0"),
+          ).join("")
+        );
+      }
+      function readable(hex) {
+        const [r, g, b] = [1, 3, 5].map((i) =>
+          parseInt(hex.slice(i, i + 2), 16),
+        );
+        return 0.299 * r + 0.587 * g + 0.114 * b > 150 ? "#16202A" : "#FFFFFF";
+      }
+
+      /* ── 구 지도 ── */
+      function renderGuMap() {
+        const rows = visible();
+        const gw = $("gunwi").checked;
+        const byGu = {};
+        rows.forEach((r) => {
+          (byGu[r["시군구명"]] ||= []).push(r);
+        });
+
+        let s = '<svg class="gumap" viewBox="0 0 584 636" role="img">';
+        Object.entries(GU_BOX).forEach(([gu, [x, y, w, h]]) => {
+          if (gu === "군위군" && !gw) return;
+          const list = byGu[gu] || [];
+          const fill = guShade(list);
+          const ink = readable(fill);
+          s +=
+            '<g class="gu' +
+            (list.length ? "" : " dim") +
+            '" data-gu="' +
+            gu +
+            '">' +
+            '<rect x="' +
+            x +
+            '" y="' +
+            y +
+            '" width="' +
+            w +
+            '" height="' +
+            h +
+            '" rx="10" fill="' +
+            fill +
+            '"></rect>' +
+            '<text class="gname" x="' +
+            (x + w / 2) +
+            '" y="' +
+            (y + h / 2 - 2) +
+            '" fill="' +
+            ink +
+            '">' +
+            gu +
+            "</text>" +
+            '<text class="gnum" x="' +
+            (x + w / 2) +
+            '" y="' +
+            (y + h / 2 + 18) +
+            '" fill="' +
+            ink +
+            '">' +
+            list.length +
+            "곳</text>" +
+            "</g>";
+        });
+        s += "</svg>";
+
+        $("stage").innerHTML = s;
+        $("stage")
+          .querySelectorAll(".gu")
+          .forEach((g) =>
+            g.addEventListener("click", () => openGu(g.dataset.gu)),
+          );
+
+        const type = $("typeFilter").value;
+        $("mapTitle").textContent = "대구 구·군";
+        $("mapSub").textContent = type
+          ? "색이 진할수록 ‘" + LABEL[type] + "’ 동이 많습니다"
+          : "색이 진할수록 손봐야 할 동이 많습니다 · 구를 누르면 동이 나옵니다";
+        $("backBtn").hidden = true;
+      }
+
+      /* ── 동 화면 ── */
+      function renderDongGrid() {
+        const rows = visible().filter((r) => r["시군구명"] === curGu);
+        rows.sort(
+          (a, b) => (b["영유아인구_0_6세"] || 0) - (a["영유아인구_0_6세"] || 0),
+        );
+
+        if (!rows.length) {
+          $("stage").innerHTML =
+            '<div class="empty">이 조건에 맞는 동이 없습니다. 유형 필터를 바꿔 보세요.</div>';
+        } else {
+          let s =
+            '<div class="dongwrap"><div class="dongtitle">아이가 많은 동부터 정렬했습니다 · 동을 누르면 상세가 나옵니다</div><div class="grid">';
+          rows.forEach((r) => {
+            const t = r["미스매치_유형"];
+            const c = TYPE_COLORS[t] || "#CBD0CE";
+            s +=
+              '<button class="dt' +
+              (PALE.has(t) ? " pale" : "") +
+              '" style="background:' +
+              c +
+              '" data-dong="' +
+              r["읍면동명"] +
+              '" aria-pressed="false">' +
+              '<span class="dn">' +
+              r["읍면동명"] +
+              "</span>" +
+              '<span class="dl">' +
+              (LABEL[t] || t) +
+              "</span>" +
+              '<span class="dp">영유아 ' +
+              num(r["영유아인구_0_6세"]) +
+              "명</span></button>";
+          });
+          s += "</div></div>";
+          $("stage").innerHTML = s;
+          $("stage")
+            .querySelectorAll(".dt")
+            .forEach((b) =>
+              b.addEventListener("click", () => openDong(b.dataset.dong)),
+            );
+        }
+
+        $("mapTitle").textContent = curGu;
+        $("mapSub").textContent = rows.length + "개 동";
+        $("backBtn").hidden = false;
+      }
+
+      function draw() {
+        curGu ? renderDongGrid() : renderGuMap();
+        markSelected();
+      }
+
+      function openGu(gu) {
+        curGu = gu;
+        closeDetail();
+        draw();
+      }
+      function backToGu() {
+        curGu = null;
+        closeDetail();
+        draw();
+      }
+
+      /* ── 동 상세 ── */
+      function openDong(name) {
+        const r = allDong.find(
+          (x) => x["시군구명"] === curGu && x["읍면동명"] === name,
+        );
+        if (!r) return;
+        curDong = name;
+        const t = r["미스매치_유형"];
+        const row = (k, v) =>
+          '<div class="rw"><span>' + k + "</span><span>" + v + "</span></div>";
+        const cover = r["전체_커버율"] != null ? pct(r["전체_커버율"]) : "-";
+        const fill = r["전체_충원율"] != null ? pct(r["전체_충원율"]) : "-";
+        const price =
+          r["평균제곱미터당가격_만원"] != null
+            ? Math.round(r["평균제곱미터당가격_만원"]).toLocaleString() +
+              "만원/㎡"
+            : "-";
+
+        $("detail").innerHTML =
+          '<div class="top"><div><h3>' +
+          r["읍면동명"] +
+          '</h3><div style="font-size:11.5px;color:var(--faint)">' +
+          r["시군구명"] +
+          '</div></div><button class="close" id="detailClose" style="border:0;background:none;color:var(--faint);cursor:pointer;font-size:11px">닫기</button></div>' +
+          '<span class="badge" style="background:' +
+          (TYPE_COLORS[t] || "#CBD0CE") +
+          (PALE.has(t) ? ";color:#16202A" : "") +
+          '">' +
+          (LABEL[t] || t) +
+          "</span>" +
+          '<div class="rows">' +
+          row("영유아(0-6세)", num(r["영유아인구_0_6세"]) + "명") +
+          row("영아(0-2세)", num(r["영아인구_0_2세"]) + "명") +
+          row("유아(3-6세)", num(r["유아인구_3_6세"]) + "명") +
+          row("유치원", (r["유치원수"] || 0) + "곳") +
+          row("어린이집", (r["어린이집수"] || 0) + "곳") +
+          row("체육시설", (r["체육시설수"] || 0) + "곳") +
+          row("아이 대비 자리", cover) +
+          row("자리 충원", fill) +
+          row("아파트 평균가", price) +
+          "</div>";
+
+        $("wrap").setAttribute("data-detail", "");
+        $("detailClose").addEventListener("click", closeDetail);
+        markSelected();
+      }
+      function closeDetail() {
+        curDong = null;
+        $("wrap").removeAttribute("data-detail");
+        markSelected();
+      }
+      function markSelected() {
+        document
+          .querySelectorAll(".dt")
+          .forEach((b) =>
+            b.setAttribute("aria-pressed", String(b.dataset.dong === curDong)),
+          );
+      }
+
+      /* ── 유형 필터 ── */
+      function setType(type) {
+        $("typeFilter").value = type;
+        if (type === "완전공백") $("gunwi").checked = true;
+        closeDetail();
+        draw();
+      }
+      function highlightQuadrant(btn) {
+        const on = btn.getAttribute("aria-pressed") === "true";
+        document
+          .querySelectorAll(".q")
+          .forEach((q) => q.setAttribute("aria-pressed", "false"));
+        btn.setAttribute("aria-pressed", String(!on));
+        closeDrill(false);
+        setType(on ? "" : btn.dataset.type);
+      }
+
+      /* ── 시설 없음 목록 ── */
       function renderBlankDetail() {
-        const rows = allDong.filter((r) => r.미스매치_유형 === "완전공백");
-        const list = document.getElementById("blankList");
-        list.innerHTML =
+        const rows = allDong.filter((r) => r["미스매치_유형"] === "완전공백");
+        $("blankList").innerHTML =
           rows
             .map((r) => {
-              const pop = (r.영유아인구_0_6세 || 0).toLocaleString();
-              const reason =
-                BLANK_REASONS[r.읍면동명] ||
-                `영유아 ${pop}명이 거주하지만 유치원·어린이집이 단 한 곳도 없습니다.`;
-              return `<div class="blank-item">
-      <div class="loc">${r.시군구명} ${r.읍면동명} (영유아 ${pop}명)</div>
-      <div class="reason">${reason}</div>
-    </div>`;
+              const pop = num(r["영유아인구_0_6세"]);
+              const why =
+                BLANK_REASONS[r["읍면동명"]] ||
+                "영유아 " +
+                  pop +
+                  "명이 거주하지만 유치원·어린이집이 단 한 곳도 없습니다.";
+              return (
+                '<div class="bi"><div class="loc">' +
+                r["시군구명"] +
+                " " +
+                r["읍면동명"] +
+                " · 영유아 " +
+                pop +
+                '명</div><div class="why">' +
+                why +
+                "</div></div>"
+              );
             })
-            .join("") || '<div class="blank-item">해당 지역 없음</div>';
+            .join("") || '<div class="bi">해당 지역 없음</div>';
+      }
+      function openDrill() {
+        renderBlankDetail();
+        $("drill").hidden = false;
+        $("blankBtn").setAttribute("aria-expanded", "true");
+        document
+          .querySelectorAll(".q")
+          .forEach((q) => q.setAttribute("aria-pressed", "false"));
+        curGu = null;
+        setType("완전공백");
+      }
+      function closeDrill(reset) {
+        if ($("drill").hidden) return;
+        $("drill").hidden = true;
+        $("blankBtn").setAttribute("aria-expanded", "false");
+        if (reset !== false) setType("");
       }
 
-      function toggleBlankDetail() {
-        showDynamicMapContent();
-
-        const el = document.getElementById("blankDetail");
-        if (!el.classList.contains("show")) {
-          renderBlankDetail();
-          el.classList.add("show");
-        }
-
-        document.getElementById("typeFilter").value = "완전공백";
-        applyFilters();
-
-        document.getElementById("mapSection").scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }
-
-      function median(arr) {
-        const s = arr.slice().sort((a, b) => a - b);
-        const mid = Math.floor(s.length / 2);
-        return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
-      }
-
+      /* ── 데이터 ── */
       async function loadSummary() {
         const s = await fetchJSON("/api/summary");
-        document.getElementById("kpi-total").textContent = s.total_dong;
-        document.getElementById("kpi-blank").textContent =
-          s.mismatch_type_counts["완전공백"] || 0;
-
-        const counts = s.mismatch_type_counts;
+        $("kpi-total").textContent = s.total_dong;
+        $("kpi-blank").textContent = s.mismatch_type_counts["완전공백"] || 0;
         ["양호", "질적미스매치", "물리적부족", "이중취약"].forEach((t) => {
-          const el = document.getElementById("cnt-" + t);
-          if (el) el.textContent = counts[t] || 0;
+          const el = $("cnt-" + t);
+          if (el)
+            el.innerHTML =
+              (s.mismatch_type_counts[t] || 0) + "<small>곳</small>";
         });
-
-        const validGu = s.district_summary.filter(
-          (d) => d.평균_전체커버율 != null,
+        const ok = s.district_summary.filter(
+          (d) => d["평균_전체충원율"] != null,
         );
-        const avgFill =
-          validGu.reduce((a, d) => a + d.평균_전체충원율, 0) / validGu.length;
-        document.getElementById("kpi-fill").textContent =
-          (avgFill * 100).toFixed(1) + "%";
+        $("kpi-fill").textContent = pct(
+          ok.reduce((a, d) => a + d["평균_전체충원율"], 0) / ok.length,
+        );
 
-        const nonGunwi = allDong.filter((r) => r.시군구명 !== "군위군");
-        const covers = nonGunwi
-          .map((r) => r.전체_커버율)
-          .filter((v) => v != null);
-        const integratedCovers = nonGunwi
-          .map((r) => r.통합_커버율)
-          .filter((v) => v != null);
-        const medCover = median(covers);
-        const medIntegrated = median(integratedCovers);
-
-        document.getElementById("kpi-cover").textContent =
-          (medCover * 100).toFixed(1) + "%";
-        document.getElementById("kpi-cover-sub").textContent =
-          integratedCovers.length
-            ? `학원 제외 시 중앙값 ${(medIntegrated * 100).toFixed(1)}%`
-            : "";
-
-        let maxGapDong = null,
-          maxGap = -Infinity;
-        nonGunwi.forEach((r) => {
-          if (r.전체_커버율 != null && r.통합_커버율 != null) {
-            const gap = r.전체_커버율 - r.통합_커버율;
-            if (gap > maxGap) {
-              maxGap = gap;
-              maxGapDong = r;
-            }
-          }
-        });
-        const insightEl = document.getElementById("coverageInsight");
-        if (insightEl && maxGapDong) {
-          insightEl.innerHTML =
-            `학원 정원을 포함하면 커버율이 급등하는 지역이 있습니다 — 예: ` +
-            `<b>${maxGapDong.시군구명} ${maxGapDong.읍면동명}</b>은 돌봄시설만 보면 커버율 ` +
-            `${(maxGapDong.통합_커버율 * 100).toFixed(1)}%이지만, 학원까지 더하면 ` +
-            `${(maxGapDong.전체_커버율 * 100).toFixed(1)}%로 뛰어오릅니다. ` +
-            `그래서 위 "커버율" 지표는 평균 대신 극단값에 덜 흔들리는 중앙값을 사용합니다.`;
-        }
+        const c = s.mismatch_type_counts;
+        $("heroSay").innerHTML =
+          "자리가 모자라 꽉 찬 동이 <b>" +
+          (c["물리적부족"] || 0) +
+          "곳</b>, 자리는 있는데 아이가 가지 않는 동이 <b>" +
+          (c["질적미스매치"] || 0) +
+          "곳</b>입니다. " +
+          "겉으로는 똑같이 “부족해 보이는” 동네지만, 앞쪽은 지으면 풀리고 뒤쪽은 지어도 또 빕니다.";
       }
 
-      async function loadEntropy() {
-        const e = await fetchJSON("/api/entropy");
-        const container = document.getElementById("weightBars");
-        container.innerHTML = "";
-        Object.entries(e.weights).forEach(([name, w]) => {
-          const pct = (w * 100).toFixed(1);
-          const row = document.createElement("div");
-          row.className = "weight-bar-row";
-          row.innerHTML = `<div class="name">${name}</div>
-      <div class="weight-bar-track"><div class="weight-bar-fill" style="width:${pct}%"></div></div>
-      <div class="pct">${pct}%</div>`;
-          container.appendChild(row);
-        });
-        const d = e.diagnostics;
-        document.getElementById("entropyDiag").innerHTML =
-          `엔트로피 vs 단순평균 지수 상관: <b>${d.method_correlation_pearson.toFixed(3)}</b> (순위상관 <b>${d.method_correlation_spearman.toFixed(3)}</b>)<br>` +
-          `민감도 분석(가중치 ±20%, 200회): 평균 순위상관 <b>${d.sensitivity_mean_rank_corr.toFixed(3)}</b>, 최소 <b>${d.sensitivity_min_rank_corr.toFixed(3)}</b><br>` +
-          `→ 방법을 바꿔도, 가중치를 흔들어도 취약지역 순위는 안정적입니다. (군위군 ${d.n_gunwi_excluded}개 면은 별도 처리)`;
-      }
-
-      function renderRegModel(m) {
-        const rows = m.coefficients
-          .map((c) => {
-            const sig =
-              c.p_value < 0.01
-                ? "***"
-                : c.p_value < 0.05
-                  ? "**"
-                  : c.p_value < 0.1
-                    ? "*"
-                    : "";
-            return `<tr><td>${c.variable}</td><td>${c.coef.toFixed(4)}</td><td>${c.standardized_coef.toFixed(3)}</td>
-      <td>${c.p_value < 0.001 ? c.p_value.toExponential(2) : c.p_value.toFixed(3)} <span class="sig-star">${sig}</span></td></tr>`;
-          })
-          .join("");
-        return `<div style="margin-bottom:18px;">
-    <b style="font-size:13px;">${m.label}</b>
-    <table class="reg-table">
-      <thead><tr><th>변수</th><th>계수(B)</th><th>표준화(β)</th><th>p-value</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-    <span class="r2-badge">R² ${m.r_squared.toFixed(3)} · n=${m.n_obs}</span>
-    <div class="caveat">${m.caveat}</div>
-  </div>`;
-      }
-
-      async function loadRegression() {
-        const r = await fetchJSON("/api/regression");
-        document.getElementById("regressionBody").innerHTML =
-          renderRegModel(r.model_a) + renderRegModel(r.model_b);
-      }
-
-      function pct(x) {
-        return (x * 100).toFixed(1) + "%";
-      }
-
-      function renderInsights(d) {
-        const i1 = d.insight_1,
-          i2 = d.insight_2,
-          i3 = d.insight_3;
-
-        const reasonRows = i1.reason_table
-          .map(
-            (r) =>
-              `<tr><td>${r.사유}</td><td>${pct(r.영유아동반이동)}</td><td>${pct(r.전체이동)}</td><td>${r.배율.toFixed(2)}배</td></tr>`,
-          )
-          .join("");
-        const inflowRows = i1.top4_net_inflow
-          .map(
-            (r) =>
-              `<tr><td>${r.구} ${r.동}</td><td class="hot">+${r.순유입_3년.toLocaleString()}명</td></tr>`,
-          )
-          .join("");
-
-        const priorityRows = i2.priority_dongs
-          .map(
-            (r) =>
-              `<tr><td>${r.구} ${r.동}</td><td>${r.인구_0_6세.toLocaleString()}</td><td>${r.정원}</td><td>${r.현원}</td>
-     <td>${pct(r.충원율)}</td><td class="hot">+${r.순유입_3년.toLocaleString()}</td>
-     <td>${pct(r.주택사유비율)}</td><td>${r.아파트연식}년</td></tr>`,
-          )
-          .join("");
-
-        const groupRows = i3.groups
-          .map(
-            (g) =>
-              `<tr><td>${g.갈래}</td><td>${g.동수}개</td><td>${(g.순이동률_3년 * 100).toFixed(1)}%</td>
-     <td>${g.유휴정원.toLocaleString()}석</td><td>${g.아파트연식}년</td><td>${g.처방}</td></tr>`,
-          )
-          .join("");
-
-        document.getElementById("insightsBody").innerHTML = `
-    <div class="insight-card">
-      <div class="eyebrow">인사이트 1</div>
-      <h3>${i1.title}</h3>
-      <table class="insight-table">
-        <thead><tr><th>전입 사유</th><th>영유아 동반 이동</th><th>전체 이동</th><th>배율</th></tr></thead>
-        <tbody>${reasonRows}</tbody>
-      </table>
-      <table class="insight-table">
-        <thead><tr><th>3년 순유입 상위 4개 동</th><th>순유입</th></tr></thead>
-        <tbody>${inflowRows}</tbody>
-      </table>
-      <div class="insight-quote">"${i1.quote}"</div>
-      <div class="insight-note">${i1.note}</div>
-    </div>
-
-    <div class="insight-card">
-      <div class="eyebrow">인사이트 2</div>
-      <h3>${i2.title}</h3>
-      <table class="insight-table">
-        <thead><tr><th>행정동</th><th>0-6세</th><th>정원</th><th>현원</th><th>충원율</th><th>3년 순유입</th><th>주택사유</th><th>연식</th></tr></thead>
-        <tbody>${priorityRows}</tbody>
-      </table>
-      <div class="insight-quote">"${i2.quote}"</div>
-      <div class="insight-note">${i2.note}</div>
-    </div>
-
-    <div class="insight-card">
-      <div class="eyebrow">인사이트 3</div>
-      <h3>${i3.title}</h3>
-      <table class="insight-table">
-        <thead><tr><th>갈래</th><th>동수</th><th>3년 순이동률</th><th>유휴 정원</th><th>아파트 연식</th><th>처방</th></tr></thead>
-        <tbody>${groupRows}</tbody>
-      </table>
-      <div class="insight-quote">"${i3.quote}"</div>
-      ${i3.examples.map((e) => `<div class="insight-note"><b>${e.구} ${e.동}</b> (3년 순이동률 ${(e.순이동률_3년 * 100).toFixed(1)}%${e.아파트연식 ? ", 연식 " + e.아파트연식 + "년" : ""}): ${e.설명}</div>`).join("")}
-    </div>
-
-    <div class="insight-card">
-      <div class="eyebrow">정책 제언</div>
-      <ol class="policy-list">${d.policy_recommendations.map((p) => `<li>${p}</li>`).join("")}</ol>
-      <div class="caveat">${d.caveat}</div>
-      <div class="insight-note" style="margin-top:8px;">출처: ${d.source}</div>
-    </div>
-  `;
-      }
-
-      async function loadInsights() {
-        const d = await fetchJSON("/api/insights");
-        renderInsights(d);
-      }
-
-      async function main() {
-        initTabNavigation();
-        initMap();
-
+      async function loadDong() {
         allDong = await fetchJSON("/api/dong");
-        populateGuFilter(allDong);
-        renderMarkers(allDong);
-
-        // 이벤트 바인딩
-        document
-          .getElementById("guFilter")
-          .addEventListener("change", applyFilters);
-        document
-          .getElementById("typeFilter")
-          .addEventListener("change", applyFilters);
-        document
-          .getElementById("btnResetMap")
-          .addEventListener("click", resetMapToOverall);
-        document
-          .getElementById("btnOpenMapWindow")
-          .addEventListener("click", openMapInNewWindow);
-
-        document
-          .querySelectorAll(".quad")
-          .forEach((q) =>
-            q.addEventListener("click", () =>
-              highlightQuadrant(q.dataset.type),
-            ),
-          );
-
-        document
-          .getElementById("kpiBlankBox")
-          .addEventListener("click", toggleBlankDetail);
-
-        await loadSummary();
-        await loadEntropy();
-        await loadRegression();
-        await loadInsights();
-
-        document.getElementById("lastUpdated").textContent =
-          `총 ${allDong.length}개 읍면동 · 2026년 자료 기준`;
+        draw();
       }
 
-      main();
+      /* ── 이벤트 ── */
+      document
+        .querySelectorAll(".q")
+        .forEach((b) =>
+          b.addEventListener("click", () => highlightQuadrant(b)),
+        );
+      $("typeFilter").addEventListener("change", () => {
+        document
+          .querySelectorAll(".q")
+          .forEach((q) => q.setAttribute("aria-pressed", "false"));
+        closeDetail();
+        draw();
+      });
+      $("gunwi").addEventListener("change", () => {
+        if (curGu === "군위군" && !$("gunwi").checked) curGu = null;
+        closeDetail();
+        draw();
+      });
+      $("backBtn").addEventListener("click", backToGu);
+      $("blankBtn").addEventListener("click", () =>
+        $("drill").hidden ? openDrill() : closeDrill(),
+      );
+      $("drillClose").addEventListener("click", () => closeDrill());
+
+      loadSummary();
+      loadDong();
     </script>
   </body>
 </html>
