@@ -566,9 +566,11 @@
     <div class="wrap" id="wrap">
       <!-- 왼쪽: 2×2 -->
       <div class="col">
-        <p class="lead-line">
+        <p class="lead-line" id="lead-line">
           자리가 <b>넉넉한지</b>와 그 자리가 <b>실제로 찼는지</b>, 두 가지로
-          150개 동을 넷으로 나눴습니다. 칸을 누르면 지도가 걸러집니다.
+          <b id="lead-core">–</b>개 동을 넷으로 나눴습니다. 나머지
+          <b id="lead-rest">–</b>곳(시설 없음·판정 보류)은 이 틀로 잴 수 없어
+          따로 표시했습니다. 칸을 누르면 지도가 걸러집니다.
         </p>
         <div class="mx">
           <div></div>
@@ -1012,6 +1014,10 @@
         const s = await fetchJSON("/api/summary");
         $("kpi-total").textContent = s.total_dong;
         $("kpi-blank").textContent = s.mismatch_type_counts["완전공백"] || 0;
+        // "넷으로 나눴다"는 문장은 4분면 매트릭스에 실제로 들어가는 동(141)만
+        // 가리켜야 정확함 — 전체(150)를 그대로 쓰면 슬라이드 5(141)와 숫자가 어긋남.
+        $("lead-core").textContent = s.core_matrix_dong;
+        $("lead-rest").textContent = s.total_dong - s.core_matrix_dong;
         ["양호", "질적미스매치", "물리적부족", "이중취약"].forEach((t) => {
           const el = $("cnt-" + t);
           if (el)
