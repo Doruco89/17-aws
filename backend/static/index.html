@@ -523,6 +523,48 @@
         color: var(--faint);
         margin-top: 2px;
       }
+      .pop-typebar {
+        margin-top: 12px;
+        background: var(--card);
+        border: 1px solid var(--rule);
+        border-radius: 13px;
+        box-shadow: 0 10px 26px rgba(22, 32, 42, 0.18);
+        padding: 13px 16px;
+        flex: none;
+        display: none;
+      }
+      .pop-typebar[data-show] {
+        display: block;
+      }
+      .pop-typebar .bar-track {
+        display: flex;
+        height: 14px;
+        border-radius: 7px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        background: var(--paper);
+      }
+      .pop-typebar .bar-seg {
+        height: 100%;
+      }
+      .pop-typebar .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 16px;
+        font-size: 12.5px;
+        color: var(--ink-2);
+      }
+      .pop-typebar .legend .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      .pop-typebar .legend b {
+        font-family: var(--mono);
+        margin-left: 2px;
+      }
       .popbody {
         flex: 1 1 auto;
         min-height: 0;
@@ -644,7 +686,7 @@
         position: absolute;
         top: 160px;
         right: 20px;
-        z-index: 16;
+        z-index: 21;
         width: 300px;
         max-height: calc(100% - 180px);
         background: var(--card);
@@ -677,6 +719,36 @@
         font-size: 11px;
         font-weight: 700;
         margin: 7px 0 12px;
+      }
+      .stat-highlight {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .stat-box {
+        flex: 1;
+        min-width: 0;
+        border: 1px solid var(--rule);
+        border-radius: 10px;
+        padding: 10px 12px;
+        background: var(--paper);
+      }
+      .stat-label {
+        font-size: 11px;
+        color: var(--sub);
+        margin-bottom: 4px;
+      }
+      .stat-num {
+        font-size: 24px;
+        font-weight: 800;
+        font-family: var(--mono);
+        letter-spacing: -0.5px;
+        color: var(--ink);
+      }
+      .stat-num small {
+        font-size: 13px;
+        font-weight: 600;
+        margin-left: 1px;
       }
       .rows {
         border-top: 1px solid var(--rule);
@@ -841,10 +913,10 @@
 
         <div class="drill" id="drill" hidden>
           <div class="top">
-            <h3>시설이 한 곳도 없는 지역</h3>
+            <h3 id="drillTitle">시설이 한 곳도 없는 지역</h3>
             <button class="closebtn" id="drillClose">닫기</button>
           </div>
-          <p class="cap">
+          <p class="cap" id="drillCap">
             숫자만으로는 모두 같은 “공백”이지만, 배경은 서로 다릅니다.
           </p>
           <div id="blankList"></div>
@@ -864,6 +936,7 @@
           <button class="closebtn" id="popClose">닫기 ✕</button>
         </div>
         <div class="popbody"><div id="popGrid"></div></div>
+        <div class="pop-typebar" id="popTypeBar"></div>
       </div>
     </div>
 
@@ -1889,10 +1962,65 @@
             p.addEventListener("click", () => openDong(p.dataset.dong)),
           );
 
+        renderGuTypeBar(gu);
+
         $("pop").setAttribute("data-open", "");
         $("veil").setAttribute("data-open", "");
         renderMap();
         requestAnimationFrame(fitGuShape);
+      }
+
+      /* ── 구·군 팝업 하단: 그 구의 미스매치 유형별 개수 막대바 ── */
+      const TYPE_ORDER = [
+        "양호",
+        "물리적부족",
+        "질적미스매치",
+        "이중취약",
+        "완전공백",
+        "판정불가",
+      ];
+      function renderGuTypeBar(gu) {
+        const rows = allDong.filter((r) => r["시군구명"] === gu);
+        const cnt = {};
+        rows.forEach((r) => {
+          cnt[r["미스매치_유형"]] = (cnt[r["미스매치_유형"]] || 0) + 1;
+        });
+        const total = rows.length || 1;
+        const present = TYPE_ORDER.filter((t) => cnt[t]);
+        const el = $("popTypeBar");
+        if (!present.length) {
+          el.removeAttribute("data-show");
+          el.innerHTML = "";
+          return;
+        }
+        el.setAttribute("data-show", "");
+        el.innerHTML =
+          '<div class="bar-track">' +
+          present
+            .map(
+              (t) =>
+                '<div class="bar-seg" style="width:' +
+                ((cnt[t] / total) * 100).toFixed(1) +
+                "%;background:" +
+                (TYPE_COLORS[t] || "#CBD0CE") +
+                '"></div>',
+            )
+            .join("") +
+          "</div>" +
+          '<div class="legend">' +
+          present
+            .map(
+              (t) =>
+                '<span><span class="dot" style="background:' +
+                (TYPE_COLORS[t] || "#CBD0CE") +
+                '"></span>' +
+                (LABEL[t] || t) +
+                "<b>" +
+                cnt[t] +
+                "곳</b></span>",
+            )
+            .join("") +
+          "</div>";
       }
       function closePop() {
         curGu = null;
@@ -1903,6 +2031,12 @@
       }
 
       /* ── 동 상세 (평당가 제외) ── */
+      function teacherRatioColor(v) {
+        if (v == null) return "#94A0A8";
+        if (v <= 3.5) return "#1D8A4E";
+        if (v <= 5) return "#C97A0E";
+        return "#C42B2B";
+      }
       function openDong(name) {
         const r = allDong.find(
           (x) => x["시군구명"] === curGu && x["읍면동명"] === name,
@@ -1912,6 +2046,8 @@
         const t = r["미스매치_유형"];
         const row = (k, v) =>
           '<div class="rw"><span>' + k + "</span><span>" + v + "</span></div>";
+        const teacherVal = r["교사아동비"] ? 1 / r["교사아동비"] : null;
+        const tColor = teacherRatioColor(teacherVal);
 
         $("detail").innerHTML =
           '<div class="top"><div><h3>' +
@@ -1925,17 +2061,32 @@
           '">' +
           (LABEL[t] || t) +
           "</span>" +
+          '<div class="stat-highlight">' +
+          '<div class="stat-box">' +
+          '<div class="stat-label">영유아(0-6세)</div>' +
+          '<div class="stat-num">' +
+          num(r["영유아인구_0_6세"]) +
+          "<small>명</small></div>" +
+          "</div>" +
+          '<div class="stat-box" style="border-color:' +
+          tColor +
+          "33;background:" +
+          tColor +
+          '14">' +
+          '<div class="stat-label">교사 1인당 아동수</div>' +
+          '<div class="stat-num" style="color:' +
+          tColor +
+          '">' +
+          (teacherVal != null ? teacherVal.toFixed(1) : "-") +
+          "<small>명</small></div>" +
+          "</div>" +
+          "</div>" +
           '<div class="rows">' +
-          row("영유아(0-6세)", num(r["영유아인구_0_6세"]) + "명") +
           row("영아(0-2세)", num(r["영아인구_0_2세"]) + "명") +
           row("유아(3-6세)", num(r["유아인구_3_6세"]) + "명") +
           row(
             "충원율",
             r["전체_충원율"] != null ? pct(r["전체_충원율"]) : "-",
-          ) +
-          row(
-            "교사 1인당 아동수",
-            r["교사아동비"] ? (1 / r["교사아동비"]).toFixed(1) + "명" : "-",
           ) +
           "</div>";
 
@@ -1957,6 +2108,7 @@
       }
 
       /* ── 유형 필터 ── */
+      let curDrillType = null;
       function setType(type) {
         $("typeFilter").value = type;
         if (type === "완전공백") $("gunwi").checked = true;
@@ -1964,18 +2116,26 @@
         closePop();
       }
       function highlightQuadrant(btn) {
-        const on = btn.getAttribute("aria-pressed") === "true";
-        document
-          .querySelectorAll(".q")
-          .forEach((q) => q.setAttribute("aria-pressed", "false"));
-        btn.setAttribute("aria-pressed", String(!on));
-        closeDrill(false);
-        setType(on ? "" : btn.dataset.type);
+        if (curDrillType === btn.dataset.type) {
+          closeDrill();
+        } else {
+          openDrill(btn.dataset.type);
+        }
       }
 
-      /* ── 시설 없음 목록 ── */
-      function openDrill() {
-        const rows = allDong.filter((r) => r["미스매치_유형"] === "완전공백");
+      /* ── 유형별(시설없음/양호/수요초과형/공급초과형/이중취약) 동 목록 ── */
+      function openDrill(type) {
+        type = type || "완전공백";
+        curDrillType = type;
+        const rows = allDong.filter((r) => r["미스매치_유형"] === type);
+        $("drillTitle").textContent =
+          type === "완전공백"
+            ? "시설이 한 곳도 없는 지역"
+            : (LABEL[type] || type) + " " + rows.length + "곳";
+        $("drillCap").textContent =
+          type === "완전공백"
+            ? "숫자만으로는 모두 같은 \u201c공백\u201d이지만, 배경은 서로 다릅니다."
+            : "이 유형에 속한 동 목록입니다.";
         $("blankList").innerHTML =
           rows
             .map(
@@ -1991,17 +2151,26 @@
             .join("") || '<div class="bi">해당 지역 없음</div>';
         $("drill").hidden = false;
         $("chartSec").style.display = "none";
-        $("blankBtn").setAttribute("aria-expanded", "true");
+        $("blankBtn").setAttribute(
+          "aria-expanded",
+          String(type === "완전공백"),
+        );
         document
           .querySelectorAll(".q")
-          .forEach((q) => q.setAttribute("aria-pressed", "false"));
-        setType("완전공백");
+          .forEach((q) =>
+            q.setAttribute("aria-pressed", String(q.dataset.type === type)),
+          );
+        setType(type);
       }
       function closeDrill(reset) {
+        curDrillType = null;
         if ($("drill").hidden) return;
         $("drill").hidden = true;
         $("chartSec").style.display = "";
         $("blankBtn").setAttribute("aria-expanded", "false");
+        document
+          .querySelectorAll(".q")
+          .forEach((q) => q.setAttribute("aria-pressed", "false"));
         if (reset !== false) setType("");
       }
 
@@ -2130,7 +2299,7 @@
       $("popClose").addEventListener("click", closePop);
       $("veil").addEventListener("click", closePop);
       $("blankBtn").addEventListener("click", () =>
-        $("drill").hidden ? openDrill() : closeDrill(),
+        curDrillType === "완전공백" ? closeDrill() : openDrill("완전공백"),
       );
       $("drillClose").addEventListener("click", () => closeDrill());
       document.addEventListener("keydown", (e) => {
