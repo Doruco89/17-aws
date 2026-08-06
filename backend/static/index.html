@@ -45,21 +45,31 @@
       .bar {
         background: var(--ink);
         color: #fff;
-        padding: 13px 26px;
+        padding: 14px 26px;
         display: flex;
-        align-items: baseline;
-        gap: 14px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
         flex: none;
+      }
+      .titlewrap {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
       }
       .bar h1 {
         margin: 0;
-        font-size: 17px;
+        font-size: 32px;
         font-weight: 700;
         letter-spacing: -0.2px;
+        line-height: 1;
       }
       .bar .src {
-        font-size: 12px;
+        font-size: 26px;
         color: #9fb0bd;
+        line-height: 1;
       }
 
       .stats {
@@ -111,7 +121,6 @@
         flex-direction: column;
         overflow: hidden;
         background: var(--card);
-        border-top: 1px solid var(--rule);
       }
       .col {
         position: relative;
@@ -124,9 +133,9 @@
       /* 2×2 매트릭스 */
       .mx {
         display: grid;
-        grid-template-columns: 46px 1fr 1fr;
-        grid-template-rows: 22px 1fr 1fr;
-        gap: 7px;
+        grid-template-columns: 40px 1fr 1fr;
+        grid-template-rows: 18px 1fr 1fr;
+        gap: 6px;
         flex: none;
       }
       /* ▼ 축 라벨: 검정 + 위→아래 정방향 */
@@ -149,7 +158,7 @@
         border: 0;
         background: var(--card);
         border-radius: 9px;
-        padding: 14px 12px;
+        padding: 9px 10px;
         text-align: center;
         cursor: pointer;
         font: inherit;
@@ -170,7 +179,7 @@
       }
       .q .n {
         font-family: var(--mono);
-        font-size: 25px;
+        font-size: 20px;
         font-weight: 700;
         line-height: 1;
         letter-spacing: -1px;
@@ -186,9 +195,9 @@
         font-weight: 700;
       }
       .q .ds {
-        font-size: 11px;
+        font-size: 10px;
         color: rgba(255, 255, 255, 0.88);
-        line-height: 1.42;
+        line-height: 1.25;
         text-align: center;
       }
       .q.good {
@@ -212,7 +221,7 @@
       }
 
       .keys {
-        margin-top: 14px;
+        margin-top: 9px;
         display: flex;
         flex-wrap: wrap;
         gap: 6px 13px;
@@ -234,13 +243,13 @@
 
       /* 완전공백 목록 */
       .drill {
-        margin-top: 10px;
+        margin-top: 9px;
         width: 300px;
         max-width: 100%;
         background: var(--card);
         border: 1px solid var(--rule);
         border-radius: 11px;
-        padding: 14px 16px;
+        padding: 11px 14px;
         box-shadow: 0 10px 28px rgba(22, 32, 42, 0.14);
       }
       .drill:not([hidden]) {
@@ -275,8 +284,8 @@
         align-items: baseline;
         gap: 10px;
         border-top: 1px solid var(--rule);
-        padding: 8px 0;
-        font-size: 12.5px;
+        padding: 5px 0;
+        font-size: 11.5px;
       }
       .bi .loc {
         font-weight: 700;
@@ -329,36 +338,29 @@
         flex: none;
       }
       .donut-center-label {
-        font-size: 20px;
+        font-size: 17px;
         font-weight: 800;
         fill: var(--ink);
       }
       .donut-center-sub {
-        font-size: 10px;
+        font-size: 8.5px;
         fill: var(--faint);
       }
 
       /* ── 지도 ── */
       .maphead {
-        padding: 12px 16px;
-        border-bottom: 1px solid var(--rule);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
+        padding: 0;
+        border-bottom: none;
+        display: none;
         flex: none;
         z-index: 5;
-        background: var(--card);
+        background: var(--ink);
       }
       .maphead h2 {
-        margin: 0;
-        font-size: 13.5px;
-        font-weight: 700;
+        display: none;
       }
       .maphead .sub {
-        font-size: 11.5px;
-        color: var(--faint);
-        margin-top: 2px;
+        display: none;
       }
       .tools {
         display: flex;
@@ -366,20 +368,27 @@
         align-items: center;
       }
       .chk {
-        font-size: 11.5px;
+        font-size: 22px;
         color: var(--sub);
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: 5px;
         cursor: pointer;
+      }
+      .bar .chk {
+        color: rgba(255, 255, 255, 0.82);
+      }
+      .bar .chk input {
+        width: 22px;
+        height: 22px;
       }
       select {
         border: 1px solid var(--rule);
         background: var(--card);
-        border-radius: 7px;
-        padding: 5px 9px;
+        border-radius: 8px;
+        padding: 5px 10px;
         font: inherit;
-        font-size: 11.5px;
+        font-size: 22px;
         color: var(--ink-2);
         cursor: pointer;
       }
@@ -407,7 +416,7 @@
         border-radius: 12px;
         box-shadow: 0 10px 28px rgba(22, 32, 42, 0.14);
         padding: 16px 17px;
-        max-height: calc(100% - 98px);
+        max-height: calc(100% - 60px);
         overflow: auto;
       }
       .panel-stats {
@@ -461,14 +470,14 @@
       .bar-row {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 8px;
         font-size: 18px;
         border: 1px solid var(--rule);
         border-radius: 10px;
-        padding: 15px 16px;
+        padding: 13px 12px;
       }
       .bar-row .bar-label {
-        width: 62px;
+        width: 54px;
         flex: none;
         color: var(--ink);
         font-weight: 600;
@@ -478,7 +487,7 @@
       }
       .bar-row .bar-track {
         flex: 1;
-        height: 14px;
+        height: 16px;
         background: var(--paper);
         border-radius: 5px;
         overflow: hidden;
@@ -489,13 +498,13 @@
         background: #2f6fed;
       }
       .bar-row .bar-val {
-        width: 62px;
+        width: 50px;
         flex: none;
         text-align: right;
         font-family: var(--mono);
         color: var(--ink-2);
         font-weight: 700;
-        font-size: 17px;
+        font-size: 16px;
       }
       /* ── 지도: 항상 viewCore 고정, 구 클릭 시 transform으로 확대(focus+context) ── */
       .stage {
@@ -716,8 +725,9 @@
         overflow: hidden;
       }
       .gp-card .cap {
-        font-size: 13px;
-        color: var(--faint);
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--ink-2);
         margin-bottom: 8px;
       }
       .gp-lg {
@@ -741,7 +751,7 @@
         display: flex;
         align-items: flex-end;
         gap: 5px;
-        padding: 8px 2px 52px;
+        padding: 8px 2px 68px;
       }
       .vbar {
         flex: 1;
@@ -768,13 +778,14 @@
       }
       .vbar .lb {
         position: absolute;
-        top: calc(100% + 4px);
+        top: calc(100% + 5px);
         left: 50%;
         transform: translateX(-50%);
         writing-mode: vertical-rl;
-        font-size: 9px;
-        color: var(--sub);
-        max-height: 48px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--ink);
+        max-height: 64px;
         overflow: hidden;
         white-space: nowrap;
       }
@@ -796,27 +807,30 @@
         min-height: 0;
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 18px;
       }
       .gp-dstats {
         flex: 1;
         min-width: 0;
-        font-size: 15px;
+        font-size: 16px;
         color: var(--ink-2);
       }
       .gp-dstats > div {
         display: flex;
         justify-content: space-between;
         gap: 10px;
-        padding: 4px 0;
+        padding: 5px 0;
+        white-space: nowrap;
       }
       .gp-dstats b {
         font-weight: 800;
       }
       .gp-delta {
-        margin-top: 6px;
-        font-size: 14px;
+        margin-top: 7px;
+        font-size: 15px;
         font-weight: 800;
+        line-height: 1.3;
+        white-space: normal !important;
       }
       .gp-delta.pos {
         color: #1d8a4e;
@@ -991,8 +1005,24 @@
   </head>
   <body>
     <div class="bar">
-      <h1>대구 영유아 돌봄 인프라 분석</h1>
-      <span class="src">읍면동 단위 · 공공데이터 기반</span>
+      <div class="titlewrap">
+        <h1>대구 영유아 돌봄 인프라 분석</h1>
+        <span class="src">읍면동 단위 · 공공데이터 기반</span>
+      </div>
+      <div class="tools">
+        <label class="chk"
+          ><input type="checkbox" id="gunwi" /> 군위군 포함</label
+        >
+        <select id="typeFilter">
+          <option value="">전체 유형</option>
+          <option value="완전공백">시설 없음</option>
+          <option value="이중취약">이중 취약</option>
+          <option value="물리적부족">수요초과형</option>
+          <option value="질적미스매치">공급초과형</option>
+          <option value="양호">양호</option>
+          <option value="판정불가">판정 보류</option>
+        </select>
+      </div>
     </div>
 
     <div class="wrap" id="wrap">
@@ -1002,20 +1032,6 @@
           <div class="sub" id="mapSub">
             구·군을 누르면 그 안의 동이 나옵니다
           </div>
-        </div>
-        <div class="tools">
-          <label class="chk"
-            ><input type="checkbox" id="gunwi" /> 군위군 포함</label
-          >
-          <select id="typeFilter">
-            <option value="">전체 유형</option>
-            <option value="완전공백">시설 없음</option>
-            <option value="이중취약">이중 취약</option>
-            <option value="물리적부족">수요초과형</option>
-            <option value="질적미스매치">공급초과형</option>
-            <option value="양호">양호</option>
-            <option value="판정불가">판정 보류</option>
-          </select>
         </div>
       </div>
 
@@ -2265,7 +2281,7 @@
         const [m1x, m1y] = m(r - 9),
           [m2x, m2y] = m(r + 9);
         return (
-          '<svg viewBox="0 0 110 110" style="width:150px;height:150px;flex:none">' +
+          '<svg viewBox="0 0 110 110" style="width:155px;height:155px;flex:none">' +
           '<circle cx="' +
           cx +
           '" cy="' +
@@ -2704,10 +2720,10 @@
         const entries = Object.entries(byGu).sort((a, b) => b[1] - a[1]);
         const total = rows.length;
 
-        const R = 46,
-          CX = 58,
-          CY = 58,
-          SW = 20;
+        const R = 38,
+          CX = 46,
+          CY = 46,
+          SW = 16;
         const circ = 2 * Math.PI * R;
         let acc = 0;
         const arcs = entries
@@ -2742,7 +2758,7 @@
           .join("");
 
         const svg =
-          '<svg width="116" height="116" viewBox="0 0 116 116">' +
+          '<svg width="92" height="92" viewBox="0 0 92 92">' +
           arcs +
           '<text x="' +
           CX +
