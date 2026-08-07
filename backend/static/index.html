@@ -3037,9 +3037,16 @@
         if (curDrillType) openDrill(curDrillType);
       });
       $("backBtn").addEventListener("click", back);
-      $("blankBtn").addEventListener("click", () =>
-        curDrillType === "완전공백" ? closeDrill() : openDrill("완전공백"),
-      );
+      $("blankBtn").addEventListener("click", () => {
+        if (curDrillType === "완전공백") {
+          closeDrill();
+          $("gunwi").checked = false;
+          applyInsetVisibility();
+          refreshColors();
+        } else {
+          openDrill("완전공백");
+        }
+      });
       $("drillClose").addEventListener("click", () => closeDrill());
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
